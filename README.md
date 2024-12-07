@@ -8,6 +8,6 @@ Generate lighter and darker variations of any color
 
 Open the plugins modal in your Penpot project and add the next url
 
-- https://penpot-confettier-plugin.netlify.app/manifest.json
+- https://penpot-tints-and-shades-plugin.netlify.app/manifest.json
 
 Click install and you're setup!
