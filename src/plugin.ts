@@ -3,7 +3,7 @@ import { getContrast, hexToRgb, rgbToHex } from "./utils";
 
 penpot.ui.open("Tints and Shades", `?theme=${penpot.theme}`, {
   width: 280,
-  height: 160
+  height: 220
 });
 
 const RECTANGLE_WIDTH = 200;
