@@ -4,9 +4,11 @@ import "./style.css";
 const searchParams = new URLSearchParams(window.location.search);
 document.body.dataset.theme = searchParams.get("theme") ?? "light";
 
-document.querySelector("[data-handler='create-text']")?.addEventListener("click", () => {
-  // send message to plugin.ts
-  parent.postMessage("create-text", "*");
+document.querySelector("[data-handler='generate']")?.addEventListener("click", () => {
+  const tints = document.getElementById("tints") as HTMLInputElement;
+  const shades = document.getElementById("shades") as HTMLInputElement;
+
+  parent.postMessage({ msg: "generate", tintAmount: tints.value, shadeAmount: shades.value }, "*");
 });
 
 // Listen plugin.ts messages

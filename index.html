@@ -1,25 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Penpot plugin example</title>
-  </head>
-  <body>
-    <p>Penpot plugin starter template</p>
 
-    <p>
-      Checkout the
-      <a target="_blank" href="https://help.penpot.app/plugins/"
-        >documentation</a
-      >
-      to get started.
-    </p>
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Penpot Tints and Shades Plugin</title>
+</head>
 
-    <button type="button" data-appearance="primary" data-handler="create-text">
-      Create text
+<body>
+  <main>
+    <section class="rows">
+      <label for="tints">
+        Number of tints
+        <input min="1" max="7" class="input" type="number" placeholder="Tints" id="tints" value="4" />
+      </label>
+
+      <label for="shades">
+        Number of shades
+        <input min="1" max="7" class="input" type="number" placeholder="Shades" id="shades" value="4" />
+      </label>
+    </section>
+
+    <button type="button" data-appearance="primary" data-handler="generate">
+      Generate Tints and Shades
     </button>
 
-    <script type="module" src="/src/main.ts"></script>
-  </body>
+    <label>
+      Select any shape or shapes and click 'Generate' to create variants from any color
+    </label>
+  </main>
+
+  <script type="module" src="/src/main.ts"></script>
+</body>
+
 </html>

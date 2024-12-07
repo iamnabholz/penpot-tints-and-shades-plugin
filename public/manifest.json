@@ -1,6 +1,10 @@
 {
-  "name": "Penpot starter plugin",
+  "name": "Tints and Shades",
   "code": "plugin.js",
-  "description": "This is a starter plugin for Penpot",
-  "permissions": ["content:read", "content:write"]
+  "icon": "content/icon.png",
+  "description": "Generate darker and lighter variants from any color",
+  "permissions": [
+    "content:read",
+    "content:write"
+  ]
 }
