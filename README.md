@@ -2,7 +2,7 @@
 
 ![Cover image](public/content/cover.png)
 
-Generate lighter and darker variations of any color 
+Generate lighter and darker variations of any color
 
 # Install on Penpot
 

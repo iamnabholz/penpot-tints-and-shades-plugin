@@ -1,37 +1,67 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Penpot Tints and Shades Plugin</title>
+        <link rel="icon" type="image/png" href="content/icon.png" />
+    </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Penpot Tints and Shades Plugin</title>
-  <link rel="icon" type="image/png" href="content/icon.png" />
-</head>
+    <body>
+        <main>
+            <section class="rows">
+                <label for="tints">
+                    Number of tints
+                    <input
+                        min="0"
+                        max="8"
+                        class="input"
+                        type="number"
+                        placeholder="Tints"
+                        id="tints"
+                        value="4"
+                    />
+                </label>
 
-<body>
-  <main>
-    <section class="rows">
-      <label for="tints">
-        Number of tints
-        <input min="1" max="7" class="input" type="number" placeholder="Tints" id="tints" value="4" />
-      </label>
+                <label for="shades">
+                    Number of shades
+                    <input
+                        min="0"
+                        max="8"
+                        class="input"
+                        type="number"
+                        placeholder="Shades"
+                        id="shades"
+                        value="2"
+                    />
+                </label>
+            </section>
 
-      <label for="shades">
-        Number of shades
-        <input min="1" max="7" class="input" type="number" placeholder="Shades" id="shades" value="4" />
-      </label>
-    </section>
+            <div class="checkbox-container">
+                <input
+                    class="checkbox-input"
+                    type="checkbox"
+                    id="create-text-checkbox"
+                />
+                <label for="create-text-checkbox">
+                    Add text element with HEX code
+                </label>
+            </div>
 
-    <button type="button" data-appearance="primary" data-handler="generate">
-      Generate Tints and Shades
-    </button>
+            <button
+                type="button"
+                data-appearance="primary"
+                data-handler="generate"
+            >
+                Generate Tints and Shades
+            </button>
 
-    <label>
-      Select any shape(s) and click 'Generate' to create variants from any color
-    </label>
-  </main>
+            <label>
+                Select any shape(s) with a color fill and click 'Generate' to
+                create darker and lighter variants from it
+            </label>
+        </main>
 
-  <script type="module" src="/src/main.ts"></script>
-</body>
-
+        <script type="module" src="/src/main.ts"></script>
+    </body>
 </html>

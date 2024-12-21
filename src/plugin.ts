@@ -1,62 +1,79 @@
-import { Group, Shape } from "@penpot/plugin-types";
+import { Shape } from "@penpot/plugin-types";
 import { getContrast, hexToRgb, rgbToHex } from "./utils";
 
 penpot.ui.open("Tints and Shades", `?theme=${penpot.theme}`, {
   width: 280,
-  height: 220
+  height: 250,
 });
 
 const RECTANGLE_WIDTH = 200;
 const RECTANGLE_HEIGHT = 80;
 
+let CREATE_TEXT: boolean = true;
+
 const createTextElement = (text: string, box: Shape) => {
-  const textElement = penpot.createText(text);
+  const textElement = penpot.createText(text.toUpperCase());
 
   if (textElement) {
     // TEXT
     const textColor = getContrast(text);
 
     textElement.name = text;
-    textElement.align = 'center';
-    textElement.x = box.x + (box.width / 10);
-    textElement.y = box.y + (box.height / 2.5);
+    textElement.align = "center";
+    textElement.x = box.x + box.width / 10;
+    textElement.y = box.y + box.height / 2.5;
     textElement.fills = [{ fillOpacity: 1, fillColor: textColor }];
 
-    return textElement;
+    //return textElement;
+
+    const group = penpot.group([textElement, box]);
+
+    if (group) {
+      group.name = `Shade ${text}`;
+    }
   }
-}
+};
 
 const generateTints = (color: string, amount: number): string[] => {
   const tints: string[] = [];
   const baseColor = hexToRgb(color);
 
   for (let i = 1; i <= amount; i++) {
+    const factor = (i / amount) * 0.8;
+
     const tint = rgbToHex(
-      Math.min(255, baseColor.r + (255 - baseColor.r) * (i / 10)),
-      Math.min(255, baseColor.g + (255 - baseColor.g) * (i / 10)),
-      Math.min(255, baseColor.b + (255 - baseColor.b) * (i / 10))
+      Math.min(255, baseColor.r + (255 - baseColor.r) * factor),
+      Math.min(255, baseColor.g + (255 - baseColor.g) * factor),
+      Math.min(255, baseColor.b + (255 - baseColor.b) * factor),
     );
     tints.push(tint);
   }
   return tints;
-}
+};
 
 const generateShades = (color: string, amount: number): string[] => {
   const shades: string[] = [];
   const baseColor = hexToRgb(color);
 
   for (let i = 1; i <= amount; i++) {
+    const factor = (i / amount) * 0.8;
+
     const shade = rgbToHex(
-      Math.max(0, baseColor.r * (1 - i / 10)),
-      Math.max(0, baseColor.g * (1 - i / 10)),
-      Math.max(0, baseColor.b * (1 - i / 10))
+      Math.max(0, baseColor.r * (1 - factor)),
+      Math.max(0, baseColor.g * (1 - factor)),
+      Math.max(0, baseColor.b * (1 - factor)),
     );
     shades.push(shade);
+    //shades.reverse();
   }
   return shades;
-}
+};
 
-const createColorRectangles = (color: string, tints: string[], shades: string[]) => {
+const createColorShowcase = (
+  color: string,
+  tints: string[],
+  shades: string[],
+) => {
   const startColor = penpot.createRectangle();
 
   let baseGroup: any = [];
@@ -67,22 +84,12 @@ const createColorRectangles = (color: string, tints: string[], shades: string[])
     startColor.name = color;
     startColor.x = 0;
     startColor.y = 0;
-    startColor.fills = [{ fillOpacity: 1, fillColor: color }]
+    startColor.fills = [{ fillOpacity: 1, fillColor: color }];
 
-    // TEXT
-    const colorText = createTextElement(color, startColor);
-
-    if (colorText) {
-      const group = penpot.group([startColor, colorText]);
-
-      if (group) {
-        group.name = 'Base color'
-        baseGroup = group;
-      }
-    }
+    baseGroup = startColor;
   }
 
-  const tintsArray: Group[] = [];
+  const tintsArray: Shape[] = [];
 
   tints.forEach((tint, index) => {
     const rectangle = penpot.createRectangle();
@@ -93,24 +100,13 @@ const createColorRectangles = (color: string, tints: string[], shades: string[])
       rectangle.name = tint;
       rectangle.x = startColor.x;
       rectangle.y = -RECTANGLE_HEIGHT + -(RECTANGLE_HEIGHT * index);
-
       rectangle.fills = [{ fillOpacity: 1, fillColor: tint }];
 
-      // TEXT
-      const text = createTextElement(tint, rectangle);
-
-      if (text) {
-        const group = penpot.group([rectangle, text]);
-
-        if (group) {
-          group.name = `Tint ${tint}`
-          tintsArray.push(group);
-        }
-      }
+      tintsArray.push(rectangle);
     }
-  })
+  });
 
-  const shadesArray: Group[] = [];
+  const shadesArray: Shape[] = [];
 
   shades.forEach((shade, index) => {
     const rectangle = penpot.createRectangle();
@@ -120,51 +116,49 @@ const createColorRectangles = (color: string, tints: string[], shades: string[])
       rectangle.resize(RECTANGLE_WIDTH, RECTANGLE_HEIGHT);
       rectangle.name = shade;
       rectangle.x = startColor.x;
-      rectangle.y = startColor.height + (RECTANGLE_HEIGHT * index);
+      rectangle.y = startColor.height + RECTANGLE_HEIGHT * index;
       rectangle.fills = [{ fillOpacity: 1, fillColor: shade }];
 
-      // TEXT
-      const text = createTextElement(shade, rectangle);
-
-      if (text) {
-        const group = penpot.group([rectangle, text]);
-
-        if (group) {
-          group.name = `Shade ${shade}`
-          shadesArray.push(group);
-        }
-      }
+      shadesArray.push(rectangle);
     }
-  })
+  });
 
   // GROUP SHADES, TINTS, AND BASE COLOR
   const group = penpot.group([...tintsArray, baseGroup, ...shadesArray]);
 
   if (group) {
-    group.name = `${color} tints and shades`
+    group.name = `${color} tints and shades`;
+
+    if (CREATE_TEXT) {
+      group.children.forEach((child) => {
+        createTextElement(child.name, child);
+      });
+    }
+
     penpot.selection = [group];
   }
-}
+};
 
 penpot.ui.onMessage<any>((message) => {
   if (message.msg === "generate") {
     const selection = penpot.selection;
 
     if (selection) {
-      selection.forEach(element => {
+      selection.forEach((element) => {
         const fills = element.fills;
         if (Array.isArray(fills)) {
-          fills.forEach(fill => {
-            if (fill['fillColor']) {
-              const baseColor = fill['fillColor'];
+          fills.forEach((fill) => {
+            if (fill["fillColor"]) {
+              CREATE_TEXT = message.createText;
+              const baseColor = fill["fillColor"];
               const tints = generateTints(baseColor, message.tintAmount);
               const shades = generateShades(baseColor, message.shadeAmount);
 
-              createColorRectangles(baseColor, tints, shades)
+              createColorShowcase(baseColor, tints, shades);
             }
-          })
+          });
         }
-      })
+      });
     }
   }
 });
